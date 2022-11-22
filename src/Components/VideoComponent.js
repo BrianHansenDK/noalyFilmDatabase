@@ -7,7 +7,7 @@ const VideoComponent = () => {
     return (
         <View style={styles.videoModal}>
             <Video
-                source={video}
+                source={{ uri: 'https://youtu.be/2qCmRJz3NOE' }}
                 ref={(ref) => {
                     this.player = ref;
                 }}

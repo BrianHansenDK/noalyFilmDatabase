@@ -4,6 +4,7 @@ import Detail from '../Screens/Detail';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Navbar from './Navbar';
 import Search from '../Screens/Search';
+import PersonDetails from '../Screens/PersonDetails';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +21,12 @@ class MainNavigation extends React.PureComponent {
                 />
                 <Stack.Screen
                     name={'Detaljer'} component={Detail} options={{
+                        headerTransparent: true,
+                        header: ({ navigation }) => <Navbar navigation={navigation} />,
+                    }}
+                />
+                <Stack.Screen
+                    name={'Personer'} component={PersonDetails} options={{
                         headerTransparent: true,
                         header: ({ navigation }) => <Navbar navigation={navigation} />,
                     }}

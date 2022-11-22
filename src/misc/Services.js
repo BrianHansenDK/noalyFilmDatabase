@@ -1,3 +1,7 @@
+export const mainUrl = 'https://api.themoviedb.org/3/';
+export const apiKey = 'api_key=d666b35262d11f32e0795ef9aeebf982';
+export const lang = 'language=da-DK';
+
 export const getApi = (url) => {
     const response = fetch(url).then((r) => r.json());
     return response;
@@ -8,8 +12,34 @@ export const getMovie = (id) => {
     return response;
 };
 
+export const getMovieLink = (id) => {
+    return `${mainUrl}movie/${id}?${apiKey}&${lang}`;
+};
+
+export const getSimilarLink = (id) => {
+    return `${mainUrl}movie/${id}/similar?${apiKey}&${lang}&page=1`;
+};
+
+export const getImagesLink = (id) => {
+    return `${mainUrl}movie/${id}/images?${apiKey}`;
+};
+
+export const getCastLink = (id) => {
+    return getApi(`${mainUrl}movie/${id}/credits?${apiKey}&${lang}`);
+};
+
+export const getMovieVideoLink = (id) => {
+    return getApi(`${mainUrl}movie/${id}/videos?${apiKey}&language=en-US`);
+};
+
+export const getSimilar = (id) => {
+    const response = getApi(`${mainUrl}movie/${id}/similar?${apiKey}&${lang}&page=1`);
+    return response;
+};
+
+
 export const getMovieVideo = (id) => {
-    const response = getApi(`${mainUrl}movie/${id}/videos?${apiKey}`);
+    const response = getApi(`${mainUrl}movie/${id}/videos?${apiKey}&language=en-US`);
     return response;
 };
 
@@ -18,10 +48,22 @@ export const searchMovie = (query) => {
     return response;
 };
 
+export const getCast = (id) => {
+    const response = getApi(`${mainUrl}movie/${id}/credits?${apiKey}&${lang}`);
+    return response;
+};
 
-export const mainUrl = 'https://api.themoviedb.org/3/';
-export const apiKey = 'api_key=d666b35262d11f32e0795ef9aeebf982';
-export const lang = 'language=da-DK';
+export const getImages = (id) => {
+    const response = getApi(`${mainUrl}movie/${id}/images?${apiKey}`);
+    return response;
+};
+
+export const getPerson = (id) => {
+    const response = getApi(`${mainUrl}person/${id}?${apiKey}&${lang}`);
+    return response;
+};
+
+
 
 export const getPopularMoviesUrl = `${mainUrl}movie/popular?${apiKey}&${lang}&page=1`;
 export const getUpcomingMoviesUrl = `${mainUrl}movie/upcoming?${apiKey}&${lang}&page=1`;

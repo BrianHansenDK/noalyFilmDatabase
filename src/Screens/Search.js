@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Dimensions, View, TextInput, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Loader from '../Components/Loader';
 import { searchMovie } from '../misc/Services';
 
@@ -31,7 +32,7 @@ const Search = ({ navigation }) => {
     return (
         <ScrollView>
 
-            <View>
+            <SafeAreaView>
                 <TextInput
                     style={styles.input}
                     onChangeText={onChangeText}
@@ -56,7 +57,7 @@ const Search = ({ navigation }) => {
                     </View>
                 )
                     : searched && !loaded ? <Loader style={styles.fullScreen} /> : null}
-            </View>
+            </SafeAreaView>
         </ScrollView>
 
     );
@@ -64,7 +65,8 @@ const Search = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     input: {
-        marginTop: 100,
+        marginTop: 50,
+        marginHorizontal: 25,
         height: 40,
         margin: 12,
         borderWidth: 1,

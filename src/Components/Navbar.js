@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     },
     icon: {
         color: `${Colors.main}`,
+        marginTop: 10,
         marginLeft: 25,
         shadowOffset: {
             width: -4,
@@ -72,6 +73,7 @@ const styles = StyleSheet.create({
     logoCon: {
         height: 50,
         width: 50,
+        marginTop: 10,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 50,
