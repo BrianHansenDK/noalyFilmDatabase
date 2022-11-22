@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Dimensions, SafeAreaView, Image, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Dimensions, SafeAreaView, Image, Text, View, ScrollView, Modal, TouchableOpacity } from 'react-native';
 import { getPerson } from '../misc/Services';
 import dateFormat, { i18n } from 'dateformat';
+import Loader from '../Components/Loader';
+import ExitBtn from '../Components/ExitBtn';
+import WebView from 'react-native-webview';
 const placeholderImg = require('../Components/Images/noaly_db_logo_phone.png');
 
 const WIDTH = Dimensions.get('window').width; //full width
@@ -39,6 +42,8 @@ const PersonDetails = ({ route, navigation }) => {
 
     const [person, setPerson] = useState();
     const [loaded, isLoaded] = useState();
+    const [showWebsite, setShowWebsite] = useState(false);
+    const [loadedWeb, setLoadedWeb] = useState(false)
 
     useEffect(() => {
         getPerson(personId).then(r => {
@@ -46,15 +51,18 @@ const PersonDetails = ({ route, navigation }) => {
         }).catch(err => {
             console.error(err);
         }).finally(state => {
-            isLoaded(true);
+            return isLoaded(true);
         });
     }, [personId]);
 
-    console.log(JSON.stringify(person, null, 2));
+    const showModal = () => {
+        setShowWebsite(!showWebsite);
+    };
+
     return (
         <SafeAreaView>
             {
-                person ? (
+                loaded && person ? (
                     <ScrollView>
                         <View style={styles.pageWrap}>
 
@@ -94,18 +102,54 @@ const PersonDetails = ({ route, navigation }) => {
                                         </Text>
                                     ) : null
                                 }
+                                <TouchableOpacity onPress={() => { showModal() }}>
+                                    <Text>
+                                        Press here
+                                    </Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </ScrollView>
                 ) : null
             }
 
+            {
+                !loaded ? (
+                    <Loader />
+                ) : null
+            }
+            <Modal
+                animationType={'slide'}
+                visible={showWebsite}
+            >
+                <View style={styles.webViewCon}>
 
+                    <ExitBtn handlePress={() => { showModal(); }} />
+                    <WebView
+                        source={{ uri: `https://www.youtube.com/results?search_query=${person.name}` }}
+                        onLoadStart={() => setLoadedWeb(false)}
+                        onLoadEnd={() => setLoadedWeb(true)}
+                    />
+                    {
+                        !loadedWeb && (
+                            <Loader />
+                        )
+                    }
+                    <Text>
+                        Here
+                    </Text>
+                </View>
+            </Modal>
         </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
+    webViewCon: {
+        flex: 1,
+        paddingTop: 100,
+        position: 'relative',
+    },
     pageWrap: {
         flex: 1,
         justifyContent: 'center',

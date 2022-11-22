@@ -12,7 +12,7 @@ import WebView from 'react-native-webview';
 import ExitBtn from '../Components/ExitBtn';
 import CastCarousel from '../Components/Carousel/CastCarousel';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { act } from 'react-test-renderer';
+import Error from '../Components/Error';
 const placeholderImg = require('../Components/Images/noaly_db_logo_phone.png');
 
 const WIDTH = Dimensions.get('window').width; //full width
@@ -114,15 +114,18 @@ const Detail = ({ route, navigation }) => {
 
         getImages(movieId).then(imgData => {
             setImages(imgData.backdrops);
-        }).finally(state => {
-            return setLoaded(true);
+        }).catch(() => {
+            setError(true);
         });
 
         getSimilar(movieId).then((simData) => {
             setSimilar(simData.results);
-        }).finally(state => {
-            return setLoaded(true);
-        });
+        })
+            .catch(() => {
+                setError(true);
+            }).finally(state => {
+                return setLoaded(true);
+            });
 
     }, [movieId]);
 
@@ -133,10 +136,6 @@ const Detail = ({ route, navigation }) => {
         getMovieVideo(movieId).then(trailer => {
             setTrailerDt(trailer.results[0]);
         });
-    };
-
-    const imageShown = (i) => {
-        setBigImg(!bigImg);
     };
     return (
         <React.Fragment>
@@ -193,85 +192,6 @@ const Detail = ({ route, navigation }) => {
                                             carouselTitle={'Skuespillere'}
                                             content={actors}
                                         />
-                                        <Text style={styles.sectionTitle}>
-                                            Billeder
-                                        </Text>
-                                        <View>
-                                            {
-                                                images !== undefined ? (
-                                                    <View style={styles.imgGrid}>
-                                                        {images[0] ? (
-                                                            <TouchableOpacity onPress={() => { imageShown(); }}>
-                                                                <Image
-                                                                    source={{ uri: `https://image.tmdb.org/t/p/w500${images[0].file_path}` }}
-                                                                    style={styles.movieImages}
-                                                                />
-                                                            </TouchableOpacity>
-                                                        ) : null}{images[1] ? (
-                                                            <TouchableOpacity onPress={() => { imageShown(); }}>
-
-                                                                <Image
-                                                                    source={{ uri: `https://image.tmdb.org/t/p/w500${images[1].file_path}` }}
-                                                                    style={styles.movieImages}
-                                                                />
-                                                            </TouchableOpacity>
-                                                        ) : null}{images[2] ? (
-                                                            <TouchableOpacity onPress={() => { imageShown(); }}>
-
-                                                                <Image
-                                                                    source={{ uri: `https://image.tmdb.org/t/p/w500${images[2].file_path}` }}
-                                                                    style={styles.movieImages}
-                                                                />
-                                                            </TouchableOpacity>
-                                                        ) : null}{images[3] ? (
-                                                            <TouchableOpacity onPress={() => { imageShown(); }}>
-
-                                                                <Image
-                                                                    source={{ uri: `https://image.tmdb.org/t/p/w500${images[3].file_path}` }}
-                                                                    style={styles.movieImages}
-                                                                />
-                                                            </TouchableOpacity>
-                                                        ) : null}{images[4] ? (
-                                                            <TouchableOpacity onPress={() => { imageShown(); }}>
-
-                                                                <Image
-                                                                    source={{ uri: `https://image.tmdb.org/t/p/w500${images[4].file_path}` }}
-                                                                    style={styles.movieImages}
-                                                                />
-                                                            </TouchableOpacity>
-                                                        ) : null}
-                                                        {images[5] ? (
-                                                            <TouchableOpacity onPress={() => { imageShown(); }}>
-
-                                                                <Image
-                                                                    source={{ uri: `https://image.tmdb.org/t/p/w500${images[5].file_path}` }}
-                                                                    style={styles.movieImages}
-                                                                />
-                                                            </TouchableOpacity>
-                                                        ) : null}
-                                                        {images[6] ? (
-                                                            <TouchableOpacity onPress={() => { imageShown(); }}>
-
-                                                                <Image
-                                                                    source={{ uri: `https://image.tmdb.org/t/p/w500${images[6].file_path}` }}
-                                                                    style={styles.movieImages}
-                                                                />
-                                                            </TouchableOpacity>
-                                                        ) : null}
-                                                        {images[7] ? (
-                                                            <TouchableOpacity onPress={() => { imageShown(); }}>
-
-                                                                <Image
-                                                                    source={{ uri: `https://image.tmdb.org/t/p/w500${images[7].file_path}` }}
-                                                                    style={styles.movieImages}
-                                                                />
-                                                            </TouchableOpacity>
-                                                        ) : null}
-                                                    </View>
-                                                ) : null
-                                            }
-
-                                        </View>
                                         <CarouselList
                                             navigation={navigation}
                                             carouselTitle={'Lignende film'}
@@ -279,96 +199,15 @@ const Detail = ({ route, navigation }) => {
                                         />
                                     </View>
                                 ) : null
+
+                            }
+                            {
+                                error ? (
+                                    <Error />
+                                ) : null
                             }
 
                         </ScrollView>
-                        <Modal
-                            animationType={'slide'}
-                            visible={bigImg}
-                            style={styles.webViewCon}
-                        >
-                            <ExitBtn
-                                style={styles.exitBtn}
-                                handlePress={() => { imageShown(); }}
-                            />
-                            <SafeAreaView style={styles.webViewCon}>
-
-                                <ScrollView>
-                                    {
-                                        images[0] ? (
-                                            <Image
-                                                source={{ uri: `https://image.tmdb.org/t/p/w500${images[0].file_path}` }}
-                                                style={styles.bigImgs}
-                                                resizeMode={'cover'}
-                                            />
-                                        ) : null
-                                    }
-                                    {
-                                        images[1] ? (
-                                            <Image
-                                                source={{ uri: `https://image.tmdb.org/t/p/w500${images[1].file_path}` }}
-                                                style={styles.bigImgs}
-                                                resizeMode={'cover'}
-                                            />
-                                        ) : null
-                                    }
-                                    {
-                                        images[2] ? (
-                                            <Image
-                                                source={{ uri: `https://image.tmdb.org/t/p/w500${images[2].file_path}` }}
-                                                style={styles.bigImgs}
-                                                resizeMode={'cover'}
-                                            />
-                                        ) : null
-                                    }
-                                    {
-                                        images[3] ? (
-                                            <Image
-                                                source={{ uri: `https://image.tmdb.org/t/p/w500${images[3].file_path}` }}
-                                                style={styles.bigImgs}
-                                                resizeMode={'cover'}
-                                            />
-                                        ) : null
-                                    }
-                                    {
-                                        images[4] ? (
-                                            <Image
-                                                source={{ uri: `https://image.tmdb.org/t/p/w500${images[4].file_path}` }}
-                                                style={styles.bigImgs}
-                                                resizeMode={'cover'}
-                                            />
-                                        ) : null
-                                    }
-                                    {
-                                        images[5] ? (
-                                            <Image
-                                                source={{ uri: `https://image.tmdb.org/t/p/w500${images[5].file_path}` }}
-                                                style={styles.bigImgs}
-                                                resizeMode={'cover'}
-                                            />
-                                        ) : null
-                                    }
-                                    {
-                                        images[6] ? (
-                                            <Image
-                                                source={{ uri: `https://image.tmdb.org/t/p/w500${images[6].file_path}` }}
-                                                style={styles.bigImgs}
-                                                resizeMode={'cover'}
-                                            />
-                                        ) : null
-                                    }
-                                    {
-                                        images[7] ? (
-                                            <Image
-                                                source={{ uri: `https://image.tmdb.org/t/p/w500${images[7].file_path}` }}
-                                                style={styles.bigImgs}
-                                                resizeMode={'cover'}
-                                            />
-                                        ) : null
-                                    }
-                                </ScrollView>
-                            </SafeAreaView>
-                        </Modal>
                         <Modal
                             animationType={'slide'}
                             visible={modalVisible}
@@ -407,7 +246,6 @@ const Detail = ({ route, navigation }) => {
         </React.Fragment>
     );
 };
-
 const styles = StyleSheet.create({
     webViewCon: {
         flex: 1,
