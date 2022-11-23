@@ -24,6 +24,7 @@ import Error from '../Components/Error';
 import Loader from '../Components/Loader';
 import Colors from '../Theme/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import CopyRights from '../Components/CopyRights';
 
 const WIDTH = Dimensions.get('window').width; //full width
 const HEIGHT = Dimensions.get('window').height; //full height
@@ -148,6 +149,7 @@ const Home = ({ navigation }) => {
                             />
                         </View>
                     </React.Fragment>
+                    <CopyRights />
                 </ScrollView>)}
                 {!loaded && (
                     <Loader />
