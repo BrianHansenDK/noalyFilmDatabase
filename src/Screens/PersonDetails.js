@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Dimensions, SafeAreaView, Image, Text, View, ScrollView, Modal, TouchableOpacity } from 'react-native';
+import { StyleSheet, Dimensions, SafeAreaView, Image, Text, View, ScrollView, Modal } from 'react-native';
 import { getPerson } from '../misc/Services';
+import YoutubeBtn from '../Components/YoutubeBtn';
 import dateFormat, { i18n } from 'dateformat';
 import Loader from '../Components/Loader';
 import ExitBtn from '../Components/ExitBtn';
 import WebView from 'react-native-webview';
-const placeholderImg = require('../Components/Images/noaly_db_logo_phone.png');
+import Error from '../Components/Error';
+const placeholderImg = require('../Components/Images/noaly_db_logo_phone_dk.png');
 
 const WIDTH = Dimensions.get('window').width; //full width
-const HEIGHT = Dimensions.get('window').height; //full height
 
 i18n.monthNames = [
     'Jan',
@@ -40,20 +41,23 @@ i18n.monthNames = [
 const PersonDetails = ({ route, navigation }) => {
     const personId = route.params.personId;
 
+
     const [person, setPerson] = useState();
+    const [error, setError] = useState(false);
     const [loaded, isLoaded] = useState();
     const [showWebsite, setShowWebsite] = useState(false);
-    const [loadedWeb, setLoadedWeb] = useState(false)
+    const [loadedWeb, setLoadedWeb] = useState(false);
 
     useEffect(() => {
         getPerson(personId).then(r => {
             setPerson(r);
-        }).catch(err => {
-            console.error(err);
+        }).catch(() => {
+            setError(true);
         }).finally(state => {
             return isLoaded(true);
         });
     }, [personId]);
+
 
     const showModal = () => {
         setShowWebsite(!showWebsite);
@@ -65,10 +69,9 @@ const PersonDetails = ({ route, navigation }) => {
                 loaded && person ? (
                     <ScrollView>
                         <View style={styles.pageWrap}>
-
                             <Image
                                 source={
-                                    person ?
+                                    person.profile_path ?
                                         { uri: `https://image.tmdb.org/t/p/w500${person.profile_path}` }
                                         : placeholderImg
                                 }
@@ -102,14 +105,28 @@ const PersonDetails = ({ route, navigation }) => {
                                         </Text>
                                     ) : null
                                 }
-                                <TouchableOpacity onPress={() => { showModal() }}>
-                                    <Text>
-                                        Press here
-                                    </Text>
-                                </TouchableOpacity>
+                                {
+                                    person.biography ? (
+                                        <Text
+                                            style={styles.dateInfo}
+                                        >
+                                            biografi: {person.biography}
+                                        </Text>
+                                    ) : (
+                                        <Text>
+                                            Biografi: Ingen tilfængelig på dansk
+                                        </Text>
+                                    )
+                                }
+                                <YoutubeBtn handlePress={() => { showModal(); }} />
                             </View>
                         </View>
                     </ScrollView>
+                ) : null
+            }
+            {
+                loaded && error ? (
+                    <Error />
                 ) : null
             }
 
@@ -121,12 +138,13 @@ const PersonDetails = ({ route, navigation }) => {
             <Modal
                 animationType={'slide'}
                 visible={showWebsite}
+                person={person}
             >
                 <View style={styles.webViewCon}>
 
                     <ExitBtn handlePress={() => { showModal(); }} />
                     <WebView
-                        source={{ uri: `https://www.youtube.com/results?search_query=${person.name}` }}
+                        source={person ? { uri: `https://www.youtube.com/results?search_query=${person.name}` } : null}
                         onLoadStart={() => setLoadedWeb(false)}
                         onLoadEnd={() => setLoadedWeb(true)}
                     />
@@ -135,9 +153,6 @@ const PersonDetails = ({ route, navigation }) => {
                             <Loader />
                         )
                     }
-                    <Text>
-                        Here
-                    </Text>
                 </View>
             </Modal>
         </SafeAreaView>
@@ -156,6 +171,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     contentWrap: {
+        position: 'relative',
         flex: 1,
         width: WIDTH,
         flexDirection: 'column',

@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
     },
     icon: {
-        color: `${Colors.main}`,
+        color: `${Colors.background}`,
         marginTop: 10,
         marginLeft: 25,
         shadowOffset: {

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Dimensions, View, Text, Image, ScrollView, Modal, TouchableOpacity } from 'react-native';
+import { StyleSheet, Dimensions, View, Text, Image, ScrollView, Modal } from 'react-native';
 import Loader from '../Components/Loader';
-import { getApi, getCast, getCastLink, getImages, getImagesLink, getMovie, getMovieLink, getMovieVideo, getMovieVideoLink, getSimilar, getSimilarLink } from '../misc/Services';
+import { getCast, getImages, getMovie, getMovieVideo, getSimilar } from '../misc/Services';
 import StarRating from 'react-native-star-rating-widget/lib/commonjs/StarRating';
 import dateFormat, { i18n } from 'dateformat';
 import PlayButton from '../Components/PlayButton';
@@ -13,7 +13,7 @@ import ExitBtn from '../Components/ExitBtn';
 import CastCarousel from '../Components/Carousel/CastCarousel';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Error from '../Components/Error';
-const placeholderImg = require('../Components/Images/noaly_db_logo_phone.png');
+const placeholderImg = require('../Components/Images/noaly_db_logo_phone_dk.png');
 
 const WIDTH = Dimensions.get('window').width; //full width
 const HEIGHT = Dimensions.get('window').height; //full height

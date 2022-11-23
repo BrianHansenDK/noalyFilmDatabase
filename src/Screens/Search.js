@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Loader from '../Components/Loader';
 import { searchMovie } from '../misc/Services';
 
-const placeholderImg = require('../Components/Images/noaly_db_logo_phone.png');
+const placeholderImg = require('../Components/Images/noaly_db_logo_phone_dk.png');
 
 const WIDTH = Dimensions.get('window').width; //full width
 const HEIGHT = Dimensions.get('window').height; //full height

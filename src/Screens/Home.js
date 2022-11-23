@@ -165,6 +165,7 @@ const styles = StyleSheet.create({
     PageWrap: {
         height: HEIGHT,
         width: WIDTH,
+        paddingBottom: 10,
     },
     carousel: {
         marginVertical: 25,

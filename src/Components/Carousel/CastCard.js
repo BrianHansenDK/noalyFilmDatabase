@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Image, Text } from 'react-native';
-const placeholderImg = require('../Images/noaly_db_logo_phone.png');
+const placeholderImg = require('../Images/noaly_db_logo_phone_dk.png');
 
 class CastCard extends React.PureComponent {
     render() {
