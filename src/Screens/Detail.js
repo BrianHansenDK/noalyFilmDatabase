@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Dimensions, View, Text, Image, ScrollView, Modal } from 'react-native';
 import Loader from '../Components/Loader';
-import { getCast, getImages, getMovie, getMovieVideo, getSimilar } from '../misc/Services';
+import { getCast, getMovie, getMovieVideo, getSimilar } from '../misc/Services';
 import StarRating from 'react-native-star-rating-widget/lib/commonjs/StarRating';
 import dateFormat, { i18n } from 'dateformat';
 import PlayButton from '../Components/PlayButton';
@@ -65,11 +65,8 @@ const Detail = ({ route, navigation }) => {
     const [trailerDt, setTrailerDt] = useState();
     const [similar, setSimilar] = useState();
     const [actors, setActors] = useState();
-    const [images, setImages] = useState();
     const [loaded, setLoaded] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
-    const [bigImg, setBigImg] = useState(false);
-    const [currentImg, setCurrentImg] = useState(0);
     const [loadingWeb, setLoadingWeb] = useState(false);
     const [error, setError] = useState(false);
 
@@ -110,12 +107,6 @@ const Detail = ({ route, navigation }) => {
 
         getCast(movieId).then(people => {
             setActors(people.cast);
-        });
-
-        getImages(movieId).then(imgData => {
-            setImages(imgData.backdrops);
-        }).catch(() => {
-            setError(true);
         });
 
         getSimilar(movieId).then((simData) => {
@@ -225,7 +216,7 @@ const Detail = ({ route, navigation }) => {
                                     onLoadStart={() => {
                                         setLoadingWeb(true);
                                     }}
-                                    source={trailerDt ? { uri: `https://www.youtube.com/watch?v=${trailerDt.key}` } : { uri: `https://www.youtube.com/results?search_query=${movieDetail.title} trailer` }}
+                                    source={trailerDt ? { uri: `https://www.youtube.com/watch?v=${trailerDt.key}` } : movieDetail ? { uri: `https://www.youtube.com/results?search_query=${movieDetail.title} trailer` } : null}
                                 />
                                 {
                                     loadingWeb ? (

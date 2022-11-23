@@ -32,7 +32,7 @@ class CopyRights extends React.PureComponent {
             </View>
         );
     }
-};
+}
 
 const styles = StyleSheet.create({
     contentCon: {
